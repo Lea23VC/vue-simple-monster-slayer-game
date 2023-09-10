@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Monster Slayer</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div
+            class="healthbar__value"
+            :style="monsterHealthBarPercentage"
+          ></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div
+            class="healthbar__value"
+            :style="playerHealthBarPercentage"
+          ></div>
+        </div>
+      </section>
+      <section class="container" v-if="winner">
+        <h2>Game over!</h2>
+        <h3 v-if="winner === 'monster'">You lost!</h3>
+        <h3 v-else-if="winner ===' player'">You won!</h3>
+        <h3 v-else>It's a draw!</h3>
+        <button @click="startGame">Start a new game!</button>
+      </section>
+      <section id="controls" v-show="!winner">
+        <button :disabled="disabledAttackButton" @click="attackMonster">
+          ATTACK
+        </button>
+        <button
+          @click="specialAttackMonster"
+          :disabled="disabledSpecialAttackButton"
+        >
+          SPECIAL ATTACK
+        </button>
+        <button :disabled="disabledHealButton" @click="heal">HEAL</button>
+        <button @click="surrender">SURRENDER</button>
+      </section>
+      <section id="log" class="container">
+        <h2>Battle Log</h2>
+        <ul>
+          <li v-for="(log, index) in logs">
+            Turn: {{ logs.length - index }} -
+            <span :class="actionClass(log.actionType)"
+              ><span :class="whoClass(log.actionBy)"> {{ log.actionBy }} </span>
+              {{ logMessage(log.actionBy, log.actionType, log.actionValue)
+              }}</span
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
